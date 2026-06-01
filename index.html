@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commission Studio 001</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Commission Studio 001</p>
+        <h1>Bespoke Interior Specification</h1>
+      </div>
+      <div class="meta">
+        <span>Laguna Niguel, CA</span>
+        <span id="dateStamp"></span>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="panel controls">
+        <div class="panel-head">
+          <span>Materials</span>
+          <button id="saveBtn">Save</button>
+        </div>
+
+        <div class="control-group">
+          <div class="section-title">Leather</div>
+          <div class="options compact" id="leatherOptions"></div>
+        </div>
+
+        <div class="control-group">
+          <div class="section-title">Insert</div>
+          <div class="options compact" id="insertOptions"></div>
+        </div>
+
+        <div class="control-group">
+          <div class="section-title">Hardware</div>
+          <div class="options compact" id="hardwareOptions"></div>
+        </div>
+      </aside>
+
+      <section class="preview-card">
+        <div class="preview-topline">
+          <span>Live Preview</span>
+          <span>Seat material stack</span>
+        </div>
+        <div class="seat-stage" id="stage">
+          <img id="seatBase" class="layer" alt="Seat base" />
+          <img id="insertLayer" class="layer" alt="Seat insert" />
+          <img id="hardwareLayer" class="layer" alt="Seat hardware" />
+        </div>
+      </section>
+
+      <aside class="panel summary">
+        <div class="panel-head"><span>Spec</span></div>
+        <dl>
+          <div><dt>Leather</dt><dd id="sumLeather"></dd></div>
+          <div><dt>Insert</dt><dd id="sumInsert"></dd></div>
+          <div><dt>Hardware</dt><dd id="sumHardware"></dd></div>
+        </dl>
+        <div class="mini-board">
+          <div><span id="sampleLeather" class="mini-sample"></span><small id="labelLeather"></small></div>
+          <div><span id="sampleInsert" class="mini-sample"></span><small id="labelInsert"></small></div>
+          <div><span id="sampleHardware" class="mini-sample round"></span><small id="labelHardware"></small></div>
+        </div>
+        <p id="story" class="story"></p>
+      </aside>
+    </section>
+
+    <footer>
+      Designed by Neon Glitch · Bespoke 911 interior concept
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
