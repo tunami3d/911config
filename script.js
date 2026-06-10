@@ -20,14 +20,7 @@ const DATA = {
   }
 };
 
-const PRESETS = {
-  heritage: { leather: "cognac", insert: "none", hardware: "carbon" },
-  touring: { leather: "slate", insert: "pepita", hardware: "aluminum" },
-  motorsport: { leather: "black", insert: "pinkTartan", hardware: "aluminum" },
-  bold: { leather: "burgundy", insert: "coolJazz", hardware: "gold" }
-};
-
-let state = JSON.parse(localStorage.getItem("commission001") || "null") || PRESETS.heritage;
+let state = JSON.parse(localStorage.getItem("commission001") || "null") || { leather:"cognac", insert:"none", hardware:"carbon" };
 
 function storyText() {
   const l = DATA.leather[state.leather].name.toLowerCase();
@@ -76,20 +69,7 @@ function setSample(id, classes) {
 document.querySelectorAll(".option").forEach(btn => {
   btn.addEventListener("click", () => {
     state[btn.dataset.type] = btn.dataset.key;
-    document.querySelectorAll(".preset").forEach(p => p.classList.remove("active"));
-    render();
-  });
-});
-
-document.querySelectorAll(".preset").forEach(btn => {
-  btn.addEventListener("click", () => {
-    state = { ...PRESETS[btn.dataset.preset] };
-    document.querySelectorAll(".preset").forEach(p => p.classList.toggle("active", p === btn));
-    render();
-  });
-});
-
-document.getElementById("saveBtn").addEventListener("click", () => {
+    document.getElementById("saveBtn").addEventListener("click", () => {
   localStorage.setItem("commission001", JSON.stringify(state));
   const b = document.getElementById("saveBtn");
   b.textContent = "Saved";
@@ -98,11 +78,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
 
 document.getElementById("resetBtn").addEventListener("click", () => {
   state = { ...PRESETS.heritage };
-  document.querySelectorAll(".preset").forEach(p => p.classList.toggle("active", p.dataset.preset === "heritage"));
-  render();
-});
-
-document.getElementById("copyBtn").addEventListener("click", async () => {
+  document.getElementById("copyBtn").addEventListener("click", async () => {
   const text = `Commission 001\nLeather: ${DATA.leather[state.leather].name}\nInsert: ${DATA.insert[state.insert].name}\nHardware: ${DATA.hardware[state.hardware].name}\n\n${storyText()}`;
   try { await navigator.clipboard.writeText(text); } catch(e) {}
   const b = document.getElementById("copyBtn");

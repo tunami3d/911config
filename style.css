@@ -85,3 +85,9 @@
     transform: scale(1.08);
   }
 }
+
+
+/* v12 remove configurator-style presets */
+.presets{
+  display:none !important;
+}
