@@ -1,56 +1,147 @@
-const ASSET = 'assets/';
-const dateStamp = document.getElementById('dateStamp');
-if (dateStamp) dateStamp.textContent = new Date().toLocaleDateString(undefined,{year:'numeric', month:'short', day:'2-digit'});
-const leathers = [
-  {id:'leather', label:'Cognac Leather', file:'seat_baseleather.png', swatch:'leather-cognac', tone:'warm cognac leather'},
-  {id:'black', label:'Black Leather', file:'seat_baseblack.png', swatch:'leather-black', tone:'black leather'},
-  {id:'grey', label:'Slate Grey', file:'seat_basegrey.png', swatch:'leather-grey', tone:'slate grey leather'},
-  {id:'cream', label:'Cream', file:'seat_basecream.png', swatch:'leather-cream', tone:'cream leather'},
-  {id:'red', label:'Burgundy Red', file:'seat_basered.png', swatch:'leather-red', tone:'burgundy red leather'},
-];
-const inserts = [
-  {id:'none', label:'None / Full Leather', file:null, preview:'none-sample', story:'a full leather construction'},
-  {id:'pepita', label:'Pepita', file:'insert_pepita.png', preview:null, story:'classic pepita inserts'},
-  {id:'pink', label:'Pink Tartan', file:'insert_pinktartan.png', preview:null, story:'pink tartan inserts'},
-  {id:'jazz', label:'Cool Jazz', file:'insert_cooljazz.png', preview:null, story:'a cool jazz woven insert'},
-];
-const hardware = [
-  {id:'alum', label:'Satin Aluminum', file:'hardware_alum.png', swatch:'hw-alum', story:'satin aluminum hardware'},
-  {id:'gold', label:'Champagne Gold', file:'hardware_gold.png', swatch:'hw-gold', story:'champagne gold hardware'},
-  {id:'carbon', label:'Carbon Fiber', file:'hardware_carbon.png', swatch:'hw-carbon', story:'carbon fiber hardware'},
-  {id:'pink', label:'Pink Anodized', file:'hardware_pink.png', swatch:'hw-pink', story:'pink anodized hardware'},
-];
-let state = JSON.parse(localStorage.getItem('commissionStudioBuild') || 'null') || {leather:'leather', insert:'pepita', hardware:'alum'};
-function makeOption(item, group){
-  const btn=document.createElement('button'); btn.className='option'; btn.dataset.id=item.id;
-  const sw=document.createElement('span'); sw.className='swatch '+(group==='hardware'?'round ':'')+(item.swatch||item.preview||'');
-  if(group==='insert' && item.file){ sw.style.backgroundImage=`url(${ASSET+item.file})`; }
-  if(group==='insert' && item.id==='none'){ sw.textContent='—'; sw.style.display='grid'; sw.style.placeItems='center'; }
-  btn.append(sw, document.createTextNode(item.label));
-  btn.onclick=()=>{ state[group]=item.id; update(); };
-  return btn;
+const DATA = {
+  leather: {
+    cognac: { name: "Cognac Leather", img: "seat_baseleather.png", chip: "cognac" },
+    black: { name: "Black Leather", img: "seat_baseblack.png", chip: "black" },
+    slate: { name: "Slate Grey", img: "seat_basegrey.png", chip: "slate" },
+    cream: { name: "Cream", img: "seat_basecream.png", chip: "cream" },
+    burgundy: { name: "Burgundy Red", img: "seat_basered.png", chip: "burgundy" }
+  },
+  insert: {
+    none: { name: "None / Full Leather", img: "", chip: "none" },
+    pepita: { name: "Pepita", img: "insert_pepita.png", chip: "pepita" },
+    pinkTartan: { name: "Pink Tartan", img: "insert_pinktartan.png", chip: "pinkTartan" },
+    coolJazz: { name: "Cool Jazz", img: "insert_cooljazz.png", chip: "coolJazz" }
+  },
+  hardware: {
+    aluminum: { name: "Satin Aluminum", img: "hardware_alum.png", chip: "aluminum" },
+    gold: { name: "Champagne Gold", img: "hardware_gold.png", chip: "gold" },
+    carbon: { name: "Carbon Fiber", img: "hardware_carbon.png", chip: "carbon" },
+    pink: { name: "Pink Anodized", img: "hardware_pink.png", chip: "pink" }
+  }
+};
+
+const PRESETS = {
+  heritage: { leather: "cognac", insert: "none", hardware: "carbon" },
+  touring: { leather: "slate", insert: "pepita", hardware: "aluminum" },
+  motorsport: { leather: "black", insert: "pinkTartan", hardware: "aluminum" },
+  bold: { leather: "burgundy", insert: "coolJazz", hardware: "gold" }
+};
+
+let state = JSON.parse(localStorage.getItem("commission001") || "null") || PRESETS.heritage;
+
+function storyText() {
+  const l = DATA.leather[state.leather].name.toLowerCase();
+  const i = DATA.insert[state.insert].name.toLowerCase();
+  const h = DATA.hardware[state.hardware].name.toLowerCase();
+  if (state.insert === "none") {
+    return `Commission 001 pairs ${l} with a full leather construction and ${h}. The result is a restrained grand touring interior with warm material hierarchy, period influence, and clear specification intent.`;
+  }
+  return `Commission 001 pairs ${l} with ${i} inserts and ${h}. The direction balances tactile craft, period-inspired character, and a client-ready material story.`;
 }
-function renderOptions(){
-  leatherOptions.append(...leathers.map(x=>makeOption(x,'leather')));
-  insertOptions.append(...inserts.map(x=>makeOption(x,'insert')));
-  hardwareOptions.append(...hardware.map(x=>makeOption(x,'hardware')));
+
+function assetPath(img) { return img ? `assets/${img}` : ""; }
+
+function render() {
+  const leather = DATA.leather[state.leather];
+  const insert = DATA.insert[state.insert];
+  const hardware = DATA.hardware[state.hardware];
+
+  document.getElementById("baseLayer").src = assetPath(leather.img);
+  document.getElementById("insertLayer").src = assetPath(insert.img);
+  document.getElementById("hardwareLayer").src = assetPath(hardware.img);
+
+  document.getElementById("insertLayer").style.display = insert.img ? "block" : "none";
+
+  document.getElementById("leatherName").textContent = leather.name;
+  document.getElementById("insertName").textContent = insert.name;
+  document.getElementById("hardwareName").textContent = hardware.name;
+  document.getElementById("specLeather").textContent = leather.name;
+  document.getElementById("specInsert").textContent = insert.name;
+  document.getElementById("specHardware").textContent = hardware.name;
+  document.getElementById("story").textContent = storyText();
+
+  setSample("leatherSample", ["sample","leather", leather.chip]);
+  setSample("insertSample", ["sample","insert", insert.chip]);
+  setSample("hardwareSample", ["sample","hardware", hardware.chip]);
+
+  document.querySelectorAll(".option").forEach(o => {
+    o.classList.toggle("active", state[o.dataset.type] === o.dataset.key);
+  });
 }
-function byId(arr,id){return arr.find(x=>x.id===id)||arr[0]}
-function setActive(container,id){[...container.children].forEach(b=>b.classList.toggle('active',b.dataset.id===id))}
-function update(){
-  const L=byId(leathers,state.leather), I=byId(inserts,state.insert), H=byId(hardware,state.hardware);
-  seatBase.src=ASSET+L.file;
-  insertLayer.style.display=I.file?'block':'none'; if(I.file) insertLayer.src=ASSET+I.file;
-  hardwareLayer.src=ASSET+H.file;
-  sumLeather.textContent=L.label; sumInsert.textContent=I.label; sumHardware.textContent=H.label;
-  labelLeather.textContent=L.label; labelInsert.textContent=I.label; labelHardware.textContent=H.label;
-  sampleLeather.className='sample leather-sample '+L.swatch;
-  sampleInsert.className='sample '+(I.preview||''); sampleInsert.textContent=''; sampleInsert.style.backgroundImage= I.file ? `url(${ASSET+I.file})` : '';
-  if(!I.file){sampleInsert.textContent='Full leather';}
-  sampleHardware.className='sample circle '+H.swatch;
-  story.textContent=`Commission 001 pairs ${L.tone} with ${I.story} and ${H.story}. A restrained interior study with period influence, clear material hierarchy, and a grand touring character.`;
-  setActive(leatherOptions,state.leather); setActive(insertOptions,state.insert); setActive(hardwareOptions,state.hardware);
-  localStorage.setItem('commissionStudioBuild', JSON.stringify(state));
+
+function setSample(id, classes) {
+  document.getElementById(id).className = classes.join(" ");
 }
-saveBtn.onclick=()=>{ localStorage.setItem('commissionStudioBuild', JSON.stringify(state)); saveBtn.textContent='Saved'; setTimeout(()=>saveBtn.textContent='Save Build',1200); };
-renderOptions(); update();
+
+document.querySelectorAll(".option").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state[btn.dataset.type] = btn.dataset.key;
+    document.querySelectorAll(".preset").forEach(p => p.classList.remove("active"));
+    render();
+  });
+});
+
+document.querySelectorAll(".preset").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state = { ...PRESETS[btn.dataset.preset] };
+    document.querySelectorAll(".preset").forEach(p => p.classList.toggle("active", p === btn));
+    render();
+  });
+});
+
+document.getElementById("saveBtn").addEventListener("click", () => {
+  localStorage.setItem("commission001", JSON.stringify(state));
+  const b = document.getElementById("saveBtn");
+  b.textContent = "Saved";
+  setTimeout(() => b.textContent = "Save", 1200);
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  state = { ...PRESETS.heritage };
+  document.querySelectorAll(".preset").forEach(p => p.classList.toggle("active", p.dataset.preset === "heritage"));
+  render();
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const text = `Commission 001\nLeather: ${DATA.leather[state.leather].name}\nInsert: ${DATA.insert[state.insert].name}\nHardware: ${DATA.hardware[state.hardware].name}\n\n${storyText()}`;
+  try { await navigator.clipboard.writeText(text); } catch(e) {}
+  const b = document.getElementById("copyBtn");
+  b.textContent = "Copied";
+  setTimeout(() => b.textContent = "Copy Spec", 1200);
+});
+
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+const moodGrid = document.getElementById("moodGrid");
+
+document.getElementById("browseBtn").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", e => addFiles(e.target.files));
+
+["dragenter","dragover"].forEach(evt => dropZone.addEventListener(evt, e => {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+}));
+["dragleave","drop"].forEach(evt => dropZone.addEventListener(evt, e => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+}));
+dropZone.addEventListener("drop", e => addFiles(e.dataTransfer.files));
+
+function addFiles(files) {
+  [...files].filter(file => file.type.startsWith("image/")).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const figure = document.createElement("figure");
+      figure.innerHTML = `<button class="remove-img" aria-label="Remove image">×</button><img src="${reader.result}" alt="Uploaded inspiration"><figcaption>Client reference / uploaded inspiration</figcaption>`;
+      figure.querySelector(".remove-img").addEventListener("click", () => figure.remove());
+      moodGrid.prepend(figure);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("clearMood").addEventListener("click", () => moodGrid.innerHTML = "");
+
+render();

@@ -1,82 +1,119 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Commission Studio 001</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="page">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Commission Studio 001</p>
-        <h1>Bespoke Interior Specification</h1>
+  <header class="site-header">
+    <div>
+      <div class="eyebrow">COMMISSION STUDIO 001</div>
+      <h1>Bespoke Interior Specification</h1>
+      <p class="purpose">A client-facing study for exploring material direction, interior mood, and commission-ready specifications.</p>
+    </div>
+    <nav>
+      <a href="#materials">Materials</a>
+      <a href="#mood">Moodboard</a>
+      <button id="printBtn" class="ghost">Print Spec Sheet</button>
+    </nav>
+  </header>
+
+  <section class="process">
+    <span>Inspiration</span><span>Material Direction</span><span>Seat Study</span><span>Commission Spec</span>
+  </section>
+
+  <section class="presets">
+    <button data-preset="heritage" class="preset active">Heritage</button>
+    <button data-preset="touring" class="preset">Touring</button>
+    <button data-preset="motorsport" class="preset">Motorsport</button>
+    <button data-preset="bold" class="preset">Bold</button>
+  </section>
+
+  <main class="studio-grid" id="materials">
+    <aside class="panel selectors">
+      <div class="panel-head"><h2>Materials</h2><button id="saveBtn" class="small-btn">Save</button></div>
+
+      <div class="group">
+        <h3>Leather</h3>
+        <button class="option active" data-type="leather" data-key="cognac"><span class="color-chip cognac"></span><span>Cognac Leather</span></button>
+        <button class="option" data-type="leather" data-key="black"><span class="color-chip black"></span><span>Black Leather</span></button>
+        <button class="option" data-type="leather" data-key="slate"><span class="color-chip slate"></span><span>Slate Grey</span></button>
+        <button class="option" data-type="leather" data-key="cream"><span class="color-chip cream"></span><span>Cream</span></button>
+        <button class="option" data-type="leather" data-key="burgundy"><span class="color-chip burgundy"></span><span>Burgundy Red</span></button>
       </div>
-      <div class="meta">
-        <span>Laguna Niguel, CA</span>
-        <span id="dateStamp"></span>
+
+      <div class="group">
+        <h3>Insert</h3>
+        <button class="option active" data-type="insert" data-key="none"><span class="texture-chip none"></span><span>None / Full Leather</span></button>
+        <button class="option" data-type="insert" data-key="pepita"><span class="texture-chip pepita"></span><span>Pepita</span></button>
+        <button class="option" data-type="insert" data-key="pinkTartan"><span class="texture-chip tartan"></span><span>Pink Tartan</span></button>
+        <button class="option" data-type="insert" data-key="coolJazz"><span class="texture-chip cooljazz"></span><span>Cool Jazz</span></button>
       </div>
-    </header>
 
-    <section class="workspace">
-      <aside class="panel controls">
-        <div class="panel-head">
-          <span>Materials</span>
-          <button id="saveBtn">Save</button>
-        </div>
+      <div class="group">
+        <h3>Hardware</h3>
+        <button class="option" data-type="hardware" data-key="aluminum"><span class="metal-chip aluminum"></span><span>Satin Aluminum</span></button>
+        <button class="option" data-type="hardware" data-key="gold"><span class="metal-chip gold"></span><span>Champagne Gold</span></button>
+        <button class="option active" data-type="hardware" data-key="carbon"><span class="metal-chip carbon"></span><span>Carbon Fiber</span></button>
+        <button class="option" data-type="hardware" data-key="pink"><span class="metal-chip pink"></span><span>Pink Anodized</span></button>
+      </div>
+    </aside>
 
-        <div class="control-group">
-          <div class="section-title">Leather</div>
-          <div class="options compact" id="leatherOptions"></div>
-        </div>
+    <section class="preview-panel">
+      <div class="preview-head"><span>Live Preview</span><span>Layered material stack</span></div>
 
-        <div class="control-group">
-          <div class="section-title">Insert</div>
-          <div class="options compact" id="insertOptions"></div>
-        </div>
+      <div class="seat-stage">
+        <img id="baseLayer" class="seat-layer" src="assets/seat_baseleather.png" alt="">
+        <img id="insertLayer" class="seat-layer" src="" alt="">
+        <img id="hardwareLayer" class="seat-layer" src="assets/hardware_carbon.png" alt="">
+      </div>
 
-        <div class="control-group">
-          <div class="section-title">Hardware</div>
-          <div class="options compact" id="hardwareOptions"></div>
-        </div>
-      </aside>
-
-      <section class="preview-card">
-        <div class="preview-topline">
-          <span>Live Preview</span>
-          <span>Seat material stack</span>
-        </div>
-        <div class="seat-stage" id="stage">
-          <img id="seatBase" class="layer" alt="Seat base" />
-          <img id="insertLayer" class="layer" alt="Seat insert" />
-          <img id="hardwareLayer" class="layer" alt="Seat hardware" />
-        </div>
-      </section>
-
-      <aside class="panel summary">
-        <div class="panel-head"><span>Spec</span></div>
-        <dl>
-          <div><dt>Leather</dt><dd id="sumLeather"></dd></div>
-          <div><dt>Insert</dt><dd id="sumInsert"></dd></div>
-          <div><dt>Hardware</dt><dd id="sumHardware"></dd></div>
-        </dl>
-        <div class="mini-board">
-          <div><span id="sampleLeather" class="mini-sample"></span><small id="labelLeather"></small></div>
-          <div><span id="sampleInsert" class="mini-sample"></span><small id="labelInsert"></small></div>
-          <div><span id="sampleHardware" class="mini-sample round"></span><small id="labelHardware"></small></div>
-        </div>
-        <p id="story" class="story"></p>
-      </aside>
+      <div class="material-board">
+        <div class="sample-card"><div id="leatherSample" class="sample leather cognac"></div><span>Leather</span><strong id="leatherName">Cognac Leather</strong></div>
+        <div class="sample-card"><div id="insertSample" class="sample insert none"></div><span>Insert</span><strong id="insertName">None / Full Leather</strong></div>
+        <div class="sample-card"><div id="hardwareSample" class="sample hardware carbon"></div><span>Hardware</span><strong id="hardwareName">Carbon Fiber</strong></div>
+      </div>
     </section>
 
-    <footer>
-      Designed by Neon Glitch · Bespoke 911 interior concept
-    </footer>
+    <aside class="panel spec-panel">
+      <h2>Commission Specification</h2>
+      <dl>
+        <dt>Commission</dt><dd>001</dd>
+        <dt>Leather</dt><dd id="specLeather">Cognac Leather</dd>
+        <dt>Insert</dt><dd id="specInsert">None / Full Leather</dd>
+        <dt>Hardware</dt><dd id="specHardware">Carbon Fiber</dd>
+      </dl>
+      <p id="story" class="story"></p>
+      <div class="spec-actions"><button id="copyBtn">Copy Spec</button><button id="resetBtn" class="ghost">Reset</button></div>
+    </aside>
   </main>
+
+  <section class="moodboard" id="mood">
+    <div class="mood-head">
+      <div><div class="eyebrow">INSPIRATION BOARD</div><h2>Reference Direction</h2></div>
+      <button id="clearMood" class="ghost">Clear Board</button>
+    </div>
+
+    <div id="dropZone" class="drop-zone">
+      <input id="fileInput" type="file" accept="image/*" multiple hidden>
+      <div><strong>Drop inspiration images here</strong><p>Watches, architecture, sneakers, leather goods, surf references, paint colors.</p></div>
+      <button id="browseBtn">Browse Images</button>
+    </div>
+
+    <div id="moodGrid" class="mood-grid">
+      <figure><img src="assets/inspo_rolex.png" alt=""><figcaption>GMT / polished steel / red-blue timing detail</figcaption></figure>
+      <figure><img src="assets/house.png" alt=""><figcaption>Mid-century architecture / warm stone / desert calm</figcaption></figure>
+      <figure><img src="assets/inspo_jordans.png" alt=""><figcaption>Neutral suede / layered material blocking</figcaption></figure>
+      <figure><img src="assets/inspo_bag.png" alt=""><figcaption>Leather craft / patina / hardware detail</figcaption></figure>
+    </div>
+  </section>
+
+  <footer>Independent design study. Not affiliated with Singer Vehicle Design.</footer>
   <script src="script.js"></script>
 </body>
 </html>
