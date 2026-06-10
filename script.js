@@ -34,9 +34,9 @@ function storyText() {
   const i = DATA.insert[state.insert].name.toLowerCase();
   const h = DATA.hardware[state.hardware].name.toLowerCase();
   if (state.insert === "none") {
-    return `Commission 001 pairs ${l} with a full leather construction and ${h}. The result is a restrained grand touring interior with warm material hierarchy, period influence, and clear specification intent.`;
+    return `Commission 001 pairs ${l} with a full leather construction and ${h}. The result is a restrained grand touring study with warm material hierarchy, period influence, and a clean client-ready specification.`;
   }
-  return `Commission 001 pairs ${l} with ${i} inserts and ${h}. The direction balances tactile craft, period-inspired character, and a client-ready material story.`;
+  return `Commission 001 pairs ${l} with ${i} inserts and ${h}. The direction balances tactile craft, period-inspired character, and a clear material story for client review.`;
 }
 
 function assetPath(img) { return img ? `assets/${img}` : ""; }
