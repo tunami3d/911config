@@ -46,3 +46,42 @@
 @media(max-width:620px){
   .seat-stage { min-height: 420px; }
 }
+
+
+/* v11: make the seat the hero */
+.seat-stage {
+  min-height: 760px !important;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.seat-layer {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  transform: scale(1.28);
+  transform-origin: center center;
+}
+
+@media (max-width: 1100px) {
+  .seat-stage {
+    min-height: 600px !important;
+  }
+
+  .seat-layer {
+    transform: scale(1.18);
+  }
+}
+
+@media (max-width: 620px) {
+  .seat-stage {
+    min-height: 440px !important;
+  }
+
+  .seat-layer {
+    transform: scale(1.08);
+  }
+}
